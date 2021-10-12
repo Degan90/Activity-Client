@@ -10,11 +10,11 @@ import {
   TouchableHighlight,
   SafeAreaView,
   ScrollView,
-  RefreshControl
+  RefreshControl,
 } from "react-native";
 import { Swipeable } from "react-native-gesture-handler";
 import Swipeout from "react-native-swipeout";
-import ListActivity from "../component/ListActivity";
+
 import Screen from "./Screen";
 const wait = (timeout) => {
   return new Promise((resolve) => setTimeout(resolve, timeout));
@@ -23,10 +23,7 @@ const wait = (timeout) => {
 function HomeScreen({ navigation: { navigate } }) {
   const [activities, setActivities] = useState([]);
   const [refreshing, setRefreshing] = useState(false);
-  const onRefresh = React.useCallback(() => {
-    setRefreshing(true);
-    wait(2000).then(() => setRefreshing(false));
-  }, []);
+
   const getActivity = async () => {
     try {
       const response = await fetch("https://taj-api.herokuapp.com/activities");
@@ -41,30 +38,44 @@ function HomeScreen({ navigation: { navigate } }) {
   useEffect(() => {
     getActivity();
   }, []);
+  const onRefresh = React.useCallback(() => {
+    getActivity();
+    setRefreshing(true);
+    wait(500).then(() => setRefreshing(false));
+  }, []);
 
-  const handleDelete = (activity) => {
-    // Delete the message from messages
-    setActivities(activities.filter((m) => m._id !== activity._id));
+  const handleDelete = async (activity) => {
+    try {
+      const response = await fetch(
+        `https://taj-api.herokuapp.com/activities/${activity._id}`,
+        {
+          method: "DELETE",
+          body: JSON.stringify(activities),
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      setActivities(activities.filter((m) => m._id !== activity._id));
+    } catch (error) {
+      console.log(error);
+    }
   };
-  const [myText, setMyText] = useState("My Original Text");
 
   return (
     <Screen>
-        <SafeAreaView style={styles.container}>
-          <ScrollView
-            contentContainerStyle={styles.scrollView}
-            refreshControl={
-              <RefreshControl
-                refreshing={refreshing}
-                onRefresh={onRefresh}
-              />
-            }
-          >
-      <FlatList
-        data={activities}
-        keyExtractor={(active) => active.id}
-        renderItem={({ item }) => (
-          <Swipeable>
+      <SafeAreaView style={styles.container}>
+        <ScrollView
+          contentContainerStyle={styles.scrollView}
+          refreshControl={
+            <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+          }
+        >
+          <FlatList
+            data={activities}
+            keyExtractor={(active) => active.id}
+            renderItem={({ item }) => (
+              <Swipeable>
                 <Swipeout autoClose="true">
                   <TouchableOpacity
                     onPress={() => navigate("ActivityDetailScreen", item)}
@@ -82,21 +93,23 @@ function HomeScreen({ navigation: { navigate } }) {
                           />
                         </TouchableHighlight>
                       </View>
-                      <View >
-                    <TouchableHighlight onPress={() => navigate("EditScreen", item)}>
-                      <MaterialCommunityIcons
-                        name="file-edit-outline"
-                        size={35}
-                        color="#5F92F9"
-                      />
-                    </TouchableHighlight>
-                  </View>
+                      <View>
+                        <TouchableHighlight
+                          onPress={() => navigate("EditScreen", item)}
+                        >
+                          <MaterialCommunityIcons
+                            name="file-edit-outline"
+                            size={35}
+                            color="#5F92F9"
+                          />
+                        </TouchableHighlight>
+                      </View>
                     </View>
                   </TouchableOpacity>
                 </Swipeout>
-          </Swipeable>
-        )}
-        />
+              </Swipeable>
+            )}
+          />
         </ScrollView>
       </SafeAreaView>
     </Screen>

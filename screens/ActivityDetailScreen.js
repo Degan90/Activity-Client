@@ -1,31 +1,41 @@
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import React from "react";
-import { Image, Text, View, StyleSheet, TouchableHighlight } from "react-native";
-import { Swipeable } from "react-native-gesture-handler";
 
+import React from "react";
+import { Text, View, StyleSheet } from "react-native";
+import { Swipeable } from "react-native-gesture-handler";
+import { Image, Center, NativeBaseProvider } from "native-base";
 import Screen from "./Screen";
+
 
 function ActivityDetailScreen({ route }) {
   const detail = route.params;
-  return (
-    <Screen>
-      <Swipeable>
-        <View>
-          <View style={styles.each}>
-            <Text style={styles.title}>User Name :</Text>
 
-            <Text style={styles.text}>{detail.userName}</Text>
+console.log(detail)
+
+  return (
+    <NativeBaseProvider>
+      <Screen>
+        <Swipeable>
+          <View>
+            <View style={styles.each}>
+              <Text style={styles.title}>User Name :</Text>
+
+              <Text style={styles.text}>{detail.userName}</Text>
+            </View>
+            <View style={styles.each}>
+              <Text style={styles.title}>Message:</Text>
+              <Text style={styles.text}>{detail.message}</Text>
+            </View>
+            <Image
+              source={{
+                uri: `${detail.image}`,
+              }}
+            
+              size="xl"
+            />
           </View>
-          <View style={styles.each}>
-            <Text style={styles.title}>Message:</Text>
-            <Text style={styles.text}>{detail.message}</Text>
-          </View>
-          <Image source={{ uri: detail.image }} />
-        </View>
-        <View>
-        </View>
-      </Swipeable>
-    </Screen>
+        </Swipeable>
+      </Screen>
+    </NativeBaseProvider>
   );
 }
 

@@ -3,15 +3,12 @@ import React, { useRef, useState } from "react";
 import { View, StyleSheet, ScrollView } from "react-native";
 import ImageInput from "./ImageInput";
 
-function ImageInputList({ name, formData, setFormData }) {
+function ImageInputList({ setFormData, formData }) {
   const [imageUris, setImageUris] = useState([]);
-  const scrollView = useRef();
-  console.log(imageUris);
 
   const handleAdd = (uri) => {
-    console.log(uri)
-    setImageUris([...imageUris, uri]);
-    setFormData({ ...formData, image: imageUris });
+    setImageUris([uri]);
+    setFormData({ ...formData, image: uri });
   };
 
   const handleRemove = (uri) => {
@@ -20,24 +17,17 @@ function ImageInputList({ name, formData, setFormData }) {
 
   return (
     <View>
-      <ScrollView
-        ref={scrollView}
-        horizontal
-        onContentSizeChange={() => scrollView.current.scrollToEnd()}
-      >
-        <View style={styles.container}>
-          {imageUris.map((uri) => (
-            <View key={uri} style={styles.image}>
-              <ImageInput
-                imageUri={uri}
-                onChangeImage={() => handleRemove(uri)}
-              />
-            </View>
-          ))}
-          <ImageInput onChangeImage={(uri) => handleAdd(uri)} />
-        </View>
-      </ScrollView>
-      
+      <View style={styles.container}>
+        {imageUris.map((uri) => (
+          <View key={uri} style={styles.image}>
+            <ImageInput
+              imageUri={uri}
+              onChangeImage={() => handleRemove(uri)}
+            />
+          </View>
+        ))}
+        <ImageInput onChangeImage={(uri) => handleAdd(uri)} />
+      </View>
     </View>
   );
 }

@@ -34,7 +34,7 @@ function ImageInput({ onChangeImage, imageUri }) {
         quality: 0.5,
       });
       // const source = result1.uri.replace("file://", "/private")
-      console.log(result)
+      // console.log(result)
       if (!result.cancelled) onChangeImage(result.uri);
       result.uri;
     } catch (error) {
