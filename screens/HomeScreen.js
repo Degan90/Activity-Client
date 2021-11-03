@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
   item: {
     display: "flex",
     flexDirection: "row",
-    backgroundColor: "#5B7504",
+    backgroundColor: "red",
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,

@@ -41,7 +41,7 @@ export default function FormInputScreen( { navigation: { navigate } }) {
     return true;
   };
 
- 
+
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -55,14 +55,14 @@ export default function FormInputScreen( { navigation: { navigate } }) {
       });
       
     
-      validate() ? navigate("Home") : console.log('Validation Failed');
+      validate() ?  navigate("Home") : console.log('Validation Failed');
    
     } catch (error) {
         console.log(error)
     }
   };
 
-console.log(formData)
+// console.log(formData)
   return (
     <NativeBaseProvider>
     <VStack width="90%" mx="3">

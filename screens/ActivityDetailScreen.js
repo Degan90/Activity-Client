@@ -9,7 +9,7 @@ import Screen from "./Screen";
 function ActivityDetailScreen({ route }) {
   const detail = route.params;
 
-console.log(detail)
+console.log(detail.image)
 
   return (
     <NativeBaseProvider>
@@ -29,7 +29,7 @@ console.log(detail)
               source={{
                 uri: `${detail.image}`,
               }}
-            
+              
               size="xl"
             />
           </View>
